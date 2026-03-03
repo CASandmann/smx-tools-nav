@@ -1,5 +1,5 @@
 {
-  "name": "@smx-tools/nav",
+  "name": "smx-tools-nav",
   "version": "0.1.0",
   "license": "MIT",
   "main": "./index.cjs",
@@ -19,7 +19,7 @@
   "keywords": ["smx", "navigation", "react", "nav-pane"],
   "repository": {
     "type": "git",
-    "url": "https://github.com/smx-tools/nav"
+    "url": "https://github.com/CASandmann/smx-tools-nav"
   },
   "description": "A lightweight, extensible navigation pane for smx.tools applications"
 }
