@@ -106,7 +106,7 @@ export default function HomePage() {
             }}
             data-testid="text-title"
           >
-            @smx-tools/nav
+            smx-tools-nav
           </h1>
           <p
             style={{
@@ -295,7 +295,7 @@ export default function HomePage() {
 
         <section>
           <SectionTitle color={dimFg}>Usage</SectionTitle>
-          <CodeBlock theme={theme}>{`import { SmxNav } from "@smx-tools/nav";
+          <CodeBlock theme={theme}>{`import { SmxNav } from "smx-tools-nav";
 
 // Basic usage — renders a hamburger button
 // that opens a collapsible drawer
@@ -308,7 +308,7 @@ export default function HomePage() {
 />
 
 // Extend with additional items
-import { defaultItems } from "@smx-tools/nav";
+import { defaultItems } from "smx-tools-nav";
 
 const items = [
   ...defaultItems,

@@ -5,7 +5,7 @@
 This project serves two purposes simultaneously:
 
 1. **A React demo application** that showcases and tests the `SmxNav` navigation component, letting users interactively configure its props (theme, icons, custom items).
-2. **A publishable npm library** (`@smx-tools/nav`) — a lightweight, collapsible drawer navigation pane for the `smx.tools` suite of applications. It renders a small hamburger button that expands into a vertical sidebar drawer. Built and distributed as both ESM and CJS bundles.
+2. **A publishable npm library** (`smx-tools-nav`) — a lightweight, collapsible drawer navigation pane for the `smx.tools` suite of applications. It renders a small hamburger button that expands into a vertical sidebar drawer. Built and distributed as both ESM and CJS bundles.
 
 The web app itself is a standard full-stack TypeScript setup: a React frontend served by a Node/Express backend, with a PostgreSQL database (via Drizzle ORM) and a full shadcn/ui component library.
 
@@ -53,7 +53,7 @@ The theme system uses CSS custom properties (`--background`, `--primary`, etc.) 
 
 - `shared/schema.ts` is imported by both the server and client (via the `@shared/*` path alias). Keep DB types and Zod schemas here so they're shared across the stack without duplication.
 
-### Library Build (`@smx-tools/nav`)
+### Library Build (`smx-tools-nav`)
 
 - **Source**: `lib/` directory
 - **Output**: `dist-lib/` — dual ESM + CJS bundles built with `esbuild`, plus TypeScript declaration files
@@ -104,7 +104,7 @@ The theme system uses CSS custom properties (`--background`, `--primary`, etc.) 
 - **express-session** + **passport** + **passport-local** — session-based auth infrastructure is installed but not configured in routes yet
 
 ### Library Bundling
-- **esbuild** — used to bundle the `@smx-tools/nav` library for distribution
+- **esbuild** — used to bundle the `smx-tools-nav` library for distribution
 
 ### Replit-specific
 - `@replit/vite-plugin-runtime-error-modal` — shows runtime errors as overlays in dev

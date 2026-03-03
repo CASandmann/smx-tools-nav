@@ -40,20 +40,20 @@ async function build() {
 
   fs.copyFileSync("lib/package.json", `${outDir}/package.json`);
 
-  const readme = `# @smx-tools/nav
+  const readme = `# smx-tools-nav
 
 A lightweight, extensible navigation pane for smx.tools applications.
 
 ## Install
 
 \`\`\`bash
-npm install @smx-tools/nav
+npm install smx-tools-nav
 \`\`\`
 
 ## Usage
 
 \`\`\`tsx
-import { SmxNav } from "@smx-tools/nav";
+import { SmxNav } from "smx-tools-nav";
 
 // Basic usage with default navigation items
 <SmxNav />
@@ -66,7 +66,7 @@ import { SmxNav } from "@smx-tools/nav";
 />
 
 // Extend with additional items
-import { defaultItems } from "@smx-tools/nav";
+import { defaultItems } from "smx-tools-nav";
 
 const items = [
   ...defaultItems,
