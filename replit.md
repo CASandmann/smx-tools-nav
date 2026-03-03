@@ -4,8 +4,8 @@
 
 This project serves two purposes simultaneously:
 
-1. **A React demo application** that showcases and tests the `SmxNav` navigation component, letting users interactively configure its props (theme, position, icons, custom items).
-2. **A publishable npm library** (`@smx-tools/nav`) — a lightweight, framework-agnostic navigation bar for the `smx.tools` suite of applications. It can be built and distributed as both ESM and CJS bundles.
+1. **A React demo application** that showcases and tests the `SmxNav` navigation component, letting users interactively configure its props (theme, icons, custom items).
+2. **A publishable npm library** (`@smx-tools/nav`) — a lightweight, collapsible drawer navigation pane for the `smx.tools` suite of applications. It renders a small hamburger button that expands into a vertical sidebar drawer. Built and distributed as both ESM and CJS bundles.
 
 The web app itself is a standard full-stack TypeScript setup: a React frontend served by a Node/Express backend, with a PostgreSQL database (via Drizzle ORM) and a full shadcn/ui component library.
 
@@ -59,7 +59,9 @@ The theme system uses CSS custom properties (`--background`, `--primary`, etc.) 
 - **Output**: `dist-lib/` — dual ESM + CJS bundles built with `esbuild`, plus TypeScript declaration files
 - **Build script**: `lib/build.ts` (run separately from the app build)
 - **Key exports**: `SmxNav` component, `defaultItems` array, `SmxNavItem` and `SmxNavProps` types
+- **UI**: Collapsible drawer — a fixed hamburger button in the top-left opens a vertical sidebar drawer with nav links, backdrop overlay, close button, and escape-key support
 - **Styling**: Self-contained CSS injected into `<head>` at runtime (no external CSS import needed), using a `.smx-nav` CSS namespace with CSS custom properties for light/dark theming
+- **GitHub repo**: https://github.com/CASandmann/smx-tools-nav
 - **Peer deps**: React ≥17
 
 ### Production Build

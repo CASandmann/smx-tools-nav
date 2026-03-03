@@ -39,7 +39,6 @@ const itemsPlain: SmxNavItem[] = [
 
 export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark" | "auto">("light");
-  const [position, setPosition] = useState<"top" | "left">("top");
   const [useIcons, setUseIcons] = useState(true);
   const [customItems, setCustomItems] = useState<SmxNavItem[]>([]);
   const [newLabel, setNewLabel] = useState("");
@@ -68,20 +67,33 @@ export default function HomePage() {
     setCustomItems((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const pageBg = theme === "dark" ? "#0a0b10" : "#f8fafc";
+  const pageFg = theme === "dark" ? "#e2e8f0" : "#1a1a2e";
+  const dimFg = theme === "dark" ? "#94a3b8" : "#64748b";
+  const borderColor = theme === "dark" ? "#1e293b" : "#e2e8f0";
+  const inputBg = theme === "dark" ? "#1a1d2e" : "#fff";
+
   return (
     <div
       style={{
         minHeight: "100vh",
-        background: theme === "dark" ? "#0a0b10" : "#f8fafc",
-        color: theme === "dark" ? "#e2e8f0" : "#1a1a2e",
+        background: pageBg,
+        color: pageFg,
         transition: "background 200ms, color 200ms",
       }}
     >
+      <SmxNav
+        items={allItems}
+        activeUrl="https://smx.tools"
+        theme={theme}
+        onNavigate={(url) => window.open(url, "_blank")}
+      />
+
       <div
         style={{
-          maxWidth: 960,
+          maxWidth: 720,
           margin: "0 auto",
-          padding: "48px 24px",
+          padding: "48px 24px 48px 72px",
         }}
       >
         <div style={{ marginBottom: 40 }}>
@@ -99,100 +111,19 @@ export default function HomePage() {
           <p
             style={{
               fontSize: 15,
-              color: theme === "dark" ? "#94a3b8" : "#64748b",
+              color: dimFg,
               margin: 0,
+              lineHeight: 1.6,
             }}
             data-testid="text-description"
           >
-            A lightweight, extensible navigation pane for smx.tools
-            applications.
+            A collapsible navigation drawer for smx.tools applications. Click the
+            hamburger icon in the top-left corner to open the panel.
           </p>
         </div>
 
         <section style={{ marginBottom: 40 }}>
-          <h2
-            style={{
-              fontWeight: 600,
-              marginBottom: 16,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              color: theme === "dark" ? "#94a3b8" : "#64748b",
-              fontSize: 12,
-            }}
-          >
-            Live Preview
-          </h2>
-
-          <div
-            style={{
-              border: `1px solid ${theme === "dark" ? "#1e293b" : "#e2e8f0"}`,
-              borderRadius: 8,
-              overflow: "hidden",
-              background: theme === "dark" ? "#0f1117" : "#fff",
-            }}
-            data-testid="preview-container"
-          >
-            {position === "left" ? (
-              <div style={{ display: "flex", minHeight: 300 }}>
-                <SmxNav
-                  items={allItems}
-                  activeUrl="https://smx.tools"
-                  theme={theme}
-                  position={position}
-                  onNavigate={(url) => window.open(url, "_blank")}
-                />
-                <div
-                  style={{
-                    flex: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: theme === "dark" ? "#475569" : "#94a3b8",
-                    fontSize: 14,
-                  }}
-                >
-                  App content area
-                </div>
-              </div>
-            ) : (
-              <div>
-                <SmxNav
-                  items={allItems}
-                  activeUrl="https://smx.tools"
-                  theme={theme}
-                  position={position}
-                  onNavigate={(url) => window.open(url, "_blank")}
-                />
-                <div
-                  style={{
-                    height: 200,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: theme === "dark" ? "#475569" : "#94a3b8",
-                    fontSize: 14,
-                  }}
-                >
-                  App content area
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
-
-        <section style={{ marginBottom: 40 }}>
-          <h2
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              color: theme === "dark" ? "#94a3b8" : "#64748b",
-              marginBottom: 16,
-            }}
-          >
-            Options
-          </h2>
+          <SectionTitle color={dimFg}>Options</SectionTitle>
 
           <div
             style={{
@@ -212,20 +143,6 @@ export default function HomePage() {
                   testId={`button-theme-${t}`}
                 >
                   {t.charAt(0).toUpperCase() + t.slice(1)}
-                </OptionButton>
-              ))}
-            </OptionGroup>
-
-            <OptionGroup label="Position" theme={theme}>
-              {(["top", "left"] as const).map((p) => (
-                <OptionButton
-                  key={p}
-                  active={position === p}
-                  onClick={() => setPosition(p)}
-                  theme={theme}
-                  testId={`button-position-${p}`}
-                >
-                  {p.charAt(0).toUpperCase() + p.slice(1)}
                 </OptionButton>
               ))}
             </OptionGroup>
@@ -257,7 +174,7 @@ export default function HomePage() {
                 fontWeight: 600,
                 textTransform: "uppercase",
                 letterSpacing: "0.05em",
-                color: theme === "dark" ? "#94a3b8" : "#64748b",
+                color: dimFg,
                 marginBottom: 12,
               }}
             >
@@ -280,9 +197,9 @@ export default function HomePage() {
                 style={{
                   padding: "6px 10px",
                   borderRadius: 6,
-                  border: `1px solid ${theme === "dark" ? "#1e293b" : "#e2e8f0"}`,
-                  background: theme === "dark" ? "#1a1d2e" : "#fff",
-                  color: theme === "dark" ? "#e2e8f0" : "#1a1a2e",
+                  border: `1px solid ${borderColor}`,
+                  background: inputBg,
+                  color: pageFg,
                   fontSize: 13,
                   outline: "none",
                   width: 140,
@@ -298,9 +215,9 @@ export default function HomePage() {
                 style={{
                   padding: "6px 10px",
                   borderRadius: 6,
-                  border: `1px solid ${theme === "dark" ? "#1e293b" : "#e2e8f0"}`,
-                  background: theme === "dark" ? "#1a1d2e" : "#fff",
-                  color: theme === "dark" ? "#e2e8f0" : "#1a1a2e",
+                  border: `1px solid ${borderColor}`,
+                  background: inputBg,
+                  color: pageFg,
                   fontSize: 13,
                   outline: "none",
                   width: 220,
@@ -377,21 +294,11 @@ export default function HomePage() {
         </section>
 
         <section>
-          <h2
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              color: theme === "dark" ? "#94a3b8" : "#64748b",
-              marginBottom: 16,
-            }}
-          >
-            Usage
-          </h2>
+          <SectionTitle color={dimFg}>Usage</SectionTitle>
           <CodeBlock theme={theme}>{`import { SmxNav } from "@smx-tools/nav";
 
-// Basic usage with defaults
+// Basic usage — renders a hamburger button
+// that opens a collapsible drawer
 <SmxNav />
 
 // With custom active URL and theme
@@ -401,15 +308,34 @@ export default function HomePage() {
 />
 
 // Extend with additional items
-const myItems = [
+import { defaultItems } from "@smx-tools/nav";
+
+const items = [
   ...defaultItems,
   { label: "My App", url: "https://myapp.smx.tools" },
 ];
 
-<SmxNav items={myItems} />`}</CodeBlock>
+<SmxNav items={items} />`}</CodeBlock>
         </section>
       </div>
     </div>
+  );
+}
+
+function SectionTitle({ children, color }: { children: React.ReactNode; color: string }) {
+  return (
+    <h2
+      style={{
+        fontWeight: 600,
+        marginBottom: 16,
+        textTransform: "uppercase",
+        letterSpacing: "0.05em",
+        color,
+        fontSize: 12,
+      }}
+    >
+      {children}
+    </h2>
   );
 }
 

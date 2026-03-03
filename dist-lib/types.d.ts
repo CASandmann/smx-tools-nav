@@ -10,7 +10,7 @@ export interface SmxNavProps {
     logo?: React.ReactNode;
     logoText?: string;
     className?: string;
-    position?: "top" | "left";
     theme?: "light" | "dark" | "auto";
+    defaultOpen?: boolean;
     onNavigate?: (url: string) => void;
 }
