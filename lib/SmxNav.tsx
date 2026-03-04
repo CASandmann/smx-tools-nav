@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import type { SmxNavProps } from "./types";
-import { defaultItems } from "./defaultItems";
+import type { SmxNavProps, SmxDirectory, SmxDirectoryItem } from "./types";
 import { styles, CSS_NAMESPACE } from "./styles";
+
+const DIRECTORY_URL = "https://smx.tools/directory.json";
+const HOME_URL = "https://smx.tools";
 
 const HamburgerIcon = () => (
   <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,18 +36,63 @@ const DefaultLogo = () => (
   </svg>
 );
 
+const HomeIcon = () => (
+  <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M2.5 6.5L8 2l5.5 4.5V13a1 1 0 01-1 1h-10a1 1 0 01-1-1V6.5z"
+      stroke="currentColor"
+      strokeWidth="1.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path d="M6 14V9h4v5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+function useDirectory(directoryUrl: string): { directory: SmxDirectory; loading: boolean } {
+  const [directory, setDirectory] = useState<SmxDirectory>({ sites: [], others: [] });
+  const [loading, setLoading] = useState(true);
+  const lastUrlRef = useRef("");
+
+  useEffect(() => {
+    if (lastUrlRef.current === directoryUrl) return;
+    lastUrlRef.current = directoryUrl;
+    setLoading(true);
+
+    fetch(directoryUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error("fetch failed");
+        return res.json();
+      })
+      .then((data) => {
+        setDirectory({
+          sites: Array.isArray(data?.sites) ? data.sites : [],
+          others: Array.isArray(data?.others) ? data.others : [],
+        });
+        setLoading(false);
+      })
+      .catch(() => {
+        setDirectory({ sites: [], others: [] });
+        setLoading(false);
+      });
+  }, [directoryUrl]);
+
+  return { directory, loading };
+}
+
 export function SmxNav({
-  items = defaultItems,
   activeUrl,
   logo,
   logoText = "smx.tools",
   className = "",
   theme = "auto",
   defaultOpen = false,
+  directoryUrl = DIRECTORY_URL,
   onNavigate,
 }: SmxNavProps) {
   const styleInjectedRef = useRef(false);
   const [open, setOpen] = useState(defaultOpen);
+  const { directory, loading } = useDirectory(directoryUrl);
 
   useEffect(() => {
     if (styleInjectedRef.current) return;
@@ -76,11 +123,13 @@ export function SmxNav({
   const isActive = useCallback(
     (url: string) => {
       try {
-        const itemOrigin = new URL(url).origin;
-        const currentOrigin = resolvedActive.startsWith("http")
-          ? new URL(resolvedActive).origin
-          : resolvedActive;
-        return itemOrigin === currentOrigin;
+        const itemUrl = new URL(url);
+        const currentUrl = resolvedActive.startsWith("http")
+          ? new URL(resolvedActive)
+          : null;
+        if (!currentUrl) return url === resolvedActive;
+        const normPath = (p: string) => p.replace(/\/+$/, "") || "/";
+        return itemUrl.origin === currentUrl.origin && normPath(itemUrl.pathname) === normPath(currentUrl.pathname);
       } catch {
         return url === resolvedActive;
       }
@@ -103,6 +152,23 @@ export function SmxNav({
         : "";
 
   const openClass = open ? `${CSS_NAMESPACE}--open` : "";
+
+  const renderLink = (item: SmxDirectoryItem) => {
+    const active = isActive(item.href);
+    return (
+      <li key={item.href + item.label} className={`${CSS_NAMESPACE}__item`}>
+        <a
+          href={item.href}
+          className={`${CSS_NAMESPACE}__link ${active ? `${CSS_NAMESPACE}__link--active` : ""}`}
+          title={item.description}
+          onClick={(e) => handleClick(item.href, e)}
+          data-testid={`smx-nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
+        >
+          {item.label}
+        </a>
+      </li>
+    );
+  };
 
   return (
     <div
@@ -146,29 +212,49 @@ export function SmxNav({
 
         <div className={`${CSS_NAMESPACE}__divider`} />
 
-        <ul className={`${CSS_NAMESPACE}__items`} data-testid="smx-nav-items">
-          {items.map((item) => {
-            const active = isActive(item.url);
-            return (
-              <li key={item.url + item.label} className={`${CSS_NAMESPACE}__item`}>
-                <a
-                  href={item.url}
-                  className={`${CSS_NAMESPACE}__link ${active ? `${CSS_NAMESPACE}__link--active` : ""}`}
-                  title={item.description}
-                  onClick={(e) => handleClick(item.url, e)}
-                  data-testid={`smx-nav-link-${item.label.toLowerCase().replace(/\s+/g, "-")}`}
-                >
-                  {item.icon && (
-                    <span className={`${CSS_NAMESPACE}__link-icon`}>
-                      {item.icon}
-                    </span>
-                  )}
-                  {item.label}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
+        <div className={`${CSS_NAMESPACE}__sections`} data-testid="smx-nav-sections">
+          <ul className={`${CSS_NAMESPACE}__items`} data-testid="smx-nav-items-home">
+            <li className={`${CSS_NAMESPACE}__item`}>
+              <a
+                href={HOME_URL}
+                className={`${CSS_NAMESPACE}__link ${CSS_NAMESPACE}__link--home ${isActive(HOME_URL) ? `${CSS_NAMESPACE}__link--active` : ""}`}
+                onClick={(e) => handleClick(HOME_URL, e)}
+                data-testid="smx-nav-link-home"
+              >
+                <span className={`${CSS_NAMESPACE}__link-icon`}>
+                  <HomeIcon />
+                </span>
+                Home
+              </a>
+            </li>
+          </ul>
+
+          {loading && (
+            <div className={`${CSS_NAMESPACE}__loading`} data-testid="smx-nav-loading">
+              <div className={`${CSS_NAMESPACE}__loading-dot`} />
+              <div className={`${CSS_NAMESPACE}__loading-dot`} />
+              <div className={`${CSS_NAMESPACE}__loading-dot`} />
+            </div>
+          )}
+
+          {directory.sites.length > 0 && (
+            <ul className={`${CSS_NAMESPACE}__items`} data-testid="smx-nav-items-sites">
+              {directory.sites.map(renderLink)}
+            </ul>
+          )}
+
+          {directory.others.length > 0 && (
+            <>
+              <div className={`${CSS_NAMESPACE}__section-divider`} />
+              <div className={`${CSS_NAMESPACE}__section-label`} data-testid="smx-nav-label-others">
+                Other apps
+              </div>
+              <ul className={`${CSS_NAMESPACE}__items`} data-testid="smx-nav-items-others">
+                {directory.others.map(renderLink)}
+              </ul>
+            </>
+          )}
+        </div>
 
         <div className={`${CSS_NAMESPACE}__footer`}>
           <p className={`${CSS_NAMESPACE}__footer-text`}>smx.tools</p>

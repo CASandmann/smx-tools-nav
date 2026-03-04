@@ -194,6 +194,63 @@ export const styles = `
   flex-shrink: 0;
 }
 
+/* Sections container */
+.${CSS_NAMESPACE}__sections {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-bottom: 8px;
+}
+
+/* Section label */
+.${CSS_NAMESPACE}__section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--smx-fg-secondary);
+  padding: 4px 18px 6px;
+  opacity: 0.7;
+}
+
+/* Section divider */
+.${CSS_NAMESPACE}__section-divider {
+  height: 1px;
+  background: var(--smx-border);
+  margin: 8px 12px;
+  flex-shrink: 0;
+}
+
+/* Loading indicator */
+.${CSS_NAMESPACE}__loading {
+  display: flex;
+  gap: 5px;
+  padding: 12px 18px;
+  align-items: center;
+}
+
+.${CSS_NAMESPACE}__loading-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--smx-fg-secondary);
+  opacity: 0.4;
+  animation: smx-nav-pulse 1s ease-in-out infinite;
+}
+
+.${CSS_NAMESPACE}__loading-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.${CSS_NAMESPACE}__loading-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes smx-nav-pulse {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.7; }
+}
+
 /* Nav items */
 .${CSS_NAMESPACE}__items {
   display: flex;
@@ -202,9 +259,6 @@ export const styles = `
   list-style: none;
   margin: 0;
   padding: 0 8px;
-  flex: 1;
-  overflow-y: auto;
-  scrollbar-width: thin;
 }
 
 .${CSS_NAMESPACE}__item {

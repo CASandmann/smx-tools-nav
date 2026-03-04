@@ -1,77 +1,12 @@
 import { useState } from "react";
 import { SmxNav } from "../../../lib";
-import type { SmxNavItem } from "../../../lib";
-import { Home, Settings, Monitor, BarChart3, Plus, Minus } from "lucide-react";
-
-const itemsWithIcons: SmxNavItem[] = [
-  {
-    label: "Home",
-    url: "https://smx.tools",
-    description: "SMX Tools home",
-    icon: <Home />,
-  },
-  {
-    label: "Web Config",
-    url: "https://smx.tools",
-    description: "Web configuration tools",
-    icon: <Settings />,
-  },
-  {
-    label: "OBS Plugin",
-    url: "https://obs.smx.tools",
-    description: "OBS streaming plugin",
-    icon: <Monitor />,
-  },
-  {
-    label: "Chart Voter",
-    url: "https://vote.smx.tools",
-    description: "Vote on charts",
-    icon: <BarChart3 />,
-  },
-];
-
-const itemsPlain: SmxNavItem[] = [
-  { label: "Home", url: "https://smx.tools" },
-  { label: "Web Config", url: "https://smx.tools" },
-  { label: "OBS Plugin", url: "https://obs.smx.tools" },
-  { label: "Chart Voter", url: "https://vote.smx.tools" },
-];
 
 export default function HomePage() {
   const [theme, setTheme] = useState<"light" | "dark" | "auto">("light");
-  const [useIcons, setUseIcons] = useState(true);
-  const [customItems, setCustomItems] = useState<SmxNavItem[]>([]);
-  const [newLabel, setNewLabel] = useState("");
-  const [newUrl, setNewUrl] = useState("");
-
-  const baseItems = useIcons ? itemsWithIcons : itemsPlain;
-  const allItems = [...baseItems, ...customItems];
-
-  const addItem = () => {
-    if (newLabel.trim() && newUrl.trim()) {
-      setCustomItems((prev) => [
-        ...prev,
-        {
-          label: newLabel.trim(),
-          url: newUrl.trim().startsWith("http")
-            ? newUrl.trim()
-            : `https://${newUrl.trim()}`,
-        },
-      ]);
-      setNewLabel("");
-      setNewUrl("");
-    }
-  };
-
-  const removeItem = (index: number) => {
-    setCustomItems((prev) => prev.filter((_, i) => i !== index));
-  };
 
   const pageBg = theme === "dark" ? "#0a0b10" : "#f8fafc";
   const pageFg = theme === "dark" ? "#e2e8f0" : "#1a1a2e";
   const dimFg = theme === "dark" ? "#94a3b8" : "#64748b";
-  const borderColor = theme === "dark" ? "#1e293b" : "#e2e8f0";
-  const inputBg = theme === "dark" ? "#1a1d2e" : "#fff";
 
   return (
     <div
@@ -83,7 +18,6 @@ export default function HomePage() {
       }}
     >
       <SmxNav
-        items={allItems}
         activeUrl="https://smx.tools"
         theme={theme}
         onNavigate={(url) => window.open(url, "_blank")}
@@ -118,7 +52,8 @@ export default function HomePage() {
             data-testid="text-description"
           >
             A collapsible navigation drawer for smx.tools applications. Click the
-            hamburger icon in the top-left corner to open the panel.
+            hamburger icon in the top-left corner to open the panel. Navigation
+            items are loaded automatically from smx.tools/directory.json.
           </p>
         </div>
 
@@ -146,150 +81,6 @@ export default function HomePage() {
                 </OptionButton>
               ))}
             </OptionGroup>
-
-            <OptionGroup label="Icons" theme={theme}>
-              <OptionButton
-                active={useIcons}
-                onClick={() => setUseIcons(true)}
-                theme={theme}
-                testId="button-icons-on"
-              >
-                On
-              </OptionButton>
-              <OptionButton
-                active={!useIcons}
-                onClick={() => setUseIcons(false)}
-                theme={theme}
-                testId="button-icons-off"
-              >
-                Off
-              </OptionButton>
-            </OptionGroup>
-          </div>
-
-          <div>
-            <h3
-              style={{
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-                color: dimFg,
-                marginBottom: 12,
-              }}
-            >
-              Add Custom Items
-            </h3>
-            <div
-              style={{
-                display: "flex",
-                gap: 8,
-                alignItems: "center",
-                flexWrap: "wrap",
-              }}
-            >
-              <input
-                type="text"
-                placeholder="Label"
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value)}
-                data-testid="input-label"
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  border: `1px solid ${borderColor}`,
-                  background: inputBg,
-                  color: pageFg,
-                  fontSize: 13,
-                  outline: "none",
-                  width: 140,
-                }}
-              />
-              <input
-                type="text"
-                placeholder="URL (e.g. app.smx.tools)"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addItem()}
-                data-testid="input-url"
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  border: `1px solid ${borderColor}`,
-                  background: inputBg,
-                  color: pageFg,
-                  fontSize: 13,
-                  outline: "none",
-                  width: 220,
-                }}
-              />
-              <button
-                onClick={addItem}
-                data-testid="button-add-item"
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: 6,
-                  border: "none",
-                  background: "#3b5bdb",
-                  color: "#fff",
-                  fontSize: 13,
-                  fontWeight: 500,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                }}
-              >
-                <Plus style={{ width: 14, height: 14 }} />
-                Add
-              </button>
-            </div>
-
-            {customItems.length > 0 && (
-              <div
-                style={{
-                  marginTop: 12,
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 6,
-                }}
-              >
-                {customItems.map((item, i) => (
-                  <span
-                    key={i}
-                    data-testid={`tag-custom-item-${i}`}
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 6,
-                      padding: "4px 10px",
-                      borderRadius: 99,
-                      background: theme === "dark" ? "#1a2340" : "#f0f4ff",
-                      color: theme === "dark" ? "#7c9aff" : "#3b5bdb",
-                      fontSize: 12,
-                      fontWeight: 500,
-                    }}
-                  >
-                    {item.label}
-                    <button
-                      onClick={() => removeItem(i)}
-                      data-testid={`button-remove-item-${i}`}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "inherit",
-                        cursor: "pointer",
-                        padding: 0,
-                        display: "flex",
-                        opacity: 0.7,
-                      }}
-                    >
-                      <Minus style={{ width: 12, height: 12 }} />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </section>
 
@@ -298,24 +89,15 @@ export default function HomePage() {
           <CodeBlock theme={theme}>{`import { SmxNav } from "smx-tools-nav";
 
 // Basic usage — renders a hamburger button
-// that opens a collapsible drawer
+// that opens a collapsible drawer.
+// Items are fetched from smx.tools/directory.json
 <SmxNav />
 
-// With custom active URL and theme
+// With theme and active URL
 <SmxNav
   activeUrl="https://obs.smx.tools"
   theme="dark"
-/>
-
-// Extend with additional items
-import { defaultItems } from "smx-tools-nav";
-
-const items = [
-  ...defaultItems,
-  { label: "My App", url: "https://myapp.smx.tools" },
-];
-
-<SmxNav items={items} />`}</CodeBlock>
+/>`}</CodeBlock>
         </section>
       </div>
     </div>

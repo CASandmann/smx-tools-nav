@@ -34,7 +34,7 @@ async function build() {
   ]);
 
   execSync(
-    `npx tsc lib/index.ts lib/SmxNav.tsx lib/types.ts lib/defaultItems.ts lib/styles.ts --declaration --emitDeclarationOnly --outDir ${outDir} --jsx react-jsx --moduleResolution bundler --module ESNext --target ES2020 --esModuleInterop --skipLibCheck --strict`,
+    `npx tsc lib/index.ts lib/SmxNav.tsx lib/types.ts lib/styles.ts --declaration --emitDeclarationOnly --outDir ${outDir} --jsx react-jsx --moduleResolution bundler --module ESNext --target ES2020 --esModuleInterop --skipLibCheck --strict`,
     { stdio: "inherit" }
   );
 
@@ -42,7 +42,7 @@ async function build() {
 
   const readme = `# smx-tools-nav
 
-A lightweight, extensible navigation pane for smx.tools applications.
+A lightweight navigation drawer for smx.tools applications. Items are loaded automatically from \`https://smx.tools/directory.json\`.
 
 ## Install
 
@@ -55,50 +55,28 @@ npm install smx-tools-nav
 \`\`\`tsx
 import { SmxNav } from "smx-tools-nav";
 
-// Basic usage with default navigation items
+// Basic usage — items load from smx.tools/directory.json
 <SmxNav />
 
-// With options
+// With theme and active URL highlighting
 <SmxNav
   activeUrl="https://obs.smx.tools"
   theme="dark"
-  position="top"
 />
-
-// Extend with additional items
-import { defaultItems } from "smx-tools-nav";
-
-const items = [
-  ...defaultItems,
-  { label: "My App", url: "https://myapp.smx.tools" },
-];
-
-<SmxNav items={items} />
 \`\`\`
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| items | SmxNavItem[] | defaultItems | Navigation items to display |
 | activeUrl | string | window.location.origin | URL to highlight as active |
 | logo | ReactNode | Default SVG | Custom logo element |
 | logoText | string | "smx.tools" | Text next to logo |
 | className | string | "" | Additional CSS class |
-| position | "top" \\| "left" | "top" | Bar position |
 | theme | "light" \\| "dark" \\| "auto" | "auto" | Color theme |
+| defaultOpen | boolean | false | Whether drawer starts open |
+| directoryUrl | string | "https://smx.tools/directory.json" | URL to fetch nav items from |
 | onNavigate | (url: string) => void | undefined | Custom navigation handler |
-
-## SmxNavItem
-
-\`\`\`ts
-interface SmxNavItem {
-  label: string;
-  url: string;
-  icon?: ReactNode;
-  description?: string;
-}
-\`\`\`
 `;
 
   fs.writeFileSync(`${outDir}/README.md`, readme);

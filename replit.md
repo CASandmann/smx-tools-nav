@@ -4,8 +4,8 @@
 
 This project serves two purposes simultaneously:
 
-1. **A React demo application** that showcases and tests the `SmxNav` navigation component, letting users interactively configure its props (theme, icons, custom items).
-2. **A publishable npm library** (`smx-tools-nav`) — a lightweight, collapsible drawer navigation pane for the `smx.tools` suite of applications. It renders a small hamburger button that expands into a vertical sidebar drawer. Built and distributed as both ESM and CJS bundles.
+1. **A React demo application** that showcases and tests the `SmxNav` navigation component, letting users interactively configure its theme.
+2. **A publishable npm library** (`smx-tools-nav`) — a lightweight, collapsible drawer navigation pane for the `smx.tools` suite of applications. It renders a small hamburger button that expands into a vertical sidebar drawer. Navigation items are fetched dynamically from `https://smx.tools/directory.json`. The drawer has a permanent "Home" link, an unlabeled section for smx.tools subdomains, and an "Other apps" section. Built and distributed as both ESM and CJS bundles.
 
 The web app itself is a standard full-stack TypeScript setup: a React frontend served by a Node/Express backend, with a PostgreSQL database (via Drizzle ORM) and a full shadcn/ui component library.
 

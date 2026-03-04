@@ -1,16 +1,19 @@
-export interface SmxNavItem {
+export interface SmxDirectoryItem {
     label: string;
-    url: string;
-    icon?: React.ReactNode;
     description?: string;
+    href: string;
+}
+export interface SmxDirectory {
+    sites: SmxDirectoryItem[];
+    others: SmxDirectoryItem[];
 }
 export interface SmxNavProps {
-    items?: SmxNavItem[];
     activeUrl?: string;
     logo?: React.ReactNode;
     logoText?: string;
     className?: string;
     theme?: "light" | "dark" | "auto";
     defaultOpen?: boolean;
+    directoryUrl?: string;
     onNavigate?: (url: string) => void;
 }
